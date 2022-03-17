@@ -1,0 +1,39 @@
+<h1> {{title}} </h1>
+<hr>
+<h3> Posts </h3>
+{% if posts %}
+      {% for post in posts %}
+         <a href="/topic/{{title}}/{{post.id}}">{{post.title}}</a>
+      {% endfor %}
+{% endif %}
+<hr>
+<form action="/topic/{{title}}/send_post" method="POST" onsubmit="return check(this)">
+    <p>Create a new post</p>
+    <input type="text" name="post_title" placeholder="Title...">
+    <br>
+    <textarea name="post_message" placeholder="Message..." rows="3" cols="40"></textarea>
+    <br>
+    <input type="submit" value="Send">
+</form>
+
+<script>
+function check(form) {
+    if (form.post_title.value.length > 30) {
+        alert("Title should be under 30 characters.");
+        return false;
+    }
+    else if (form.post_title.value.length == 0) {
+        alert("Title missing");
+        return false;
+    }
+    if (form.message.value.length > 2000) {
+        alert("Message should be under 2000 characters.");
+        return false;
+    }
+    if (form.message.value.length == 0) {
+        alert("Message missing.");
+        return false;
+    }
+    return true;
+}
+</script>

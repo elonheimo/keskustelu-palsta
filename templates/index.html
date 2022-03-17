@@ -1,0 +1,35 @@
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+{% if session.username %}
+    <p> Welcome {{ session.username }}
+    {% if session.username == "admin" %}
+        <a href="/admin_panel"> Admin panel</a>    
+    {% endif %}
+    <br>
+    <a href="/logout">Kirjaudu ulos</a>
+{% else %}
+    {% if session.messages %}
+        {{session.messages}}
+    {% endif %}
+    <form action="/login" method="POST">
+    <p>Username:<br>
+    <input type="text" name="username"></p>
+    <p>Password:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Login">
+    </form>
+    <hr>
+    <p> New user? </p>
+    <a href="/register">Register here</a>
+    <hr>
+{% endif %}
+<p> Topics <p>
+{% for topic in topics%}
+    <a href="/topic/{{topic.title}}">{{topic.title}}</a>
+    <br>
+{% endfor %}

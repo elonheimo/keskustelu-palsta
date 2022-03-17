@@ -1,0 +1,10 @@
+<h3> {{title}} </h3>
+<hr>
+{% if messages %}
+      {% for message in messages %}
+         {{message.message}}
+      {% endfor %}
+{% else %}
+    <p>No messages</p>
+{% endif %}
+<hr>
