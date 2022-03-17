@@ -3,6 +3,7 @@
 Sovellus on malliaiheesta "Keskustelusovellus"
 
 Sovelluksen ominaisuuksia:
+
 ( [OK] Tarkoittaa, että ominaisuus on valmis )
 
 [OK] Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
