@@ -61,16 +61,27 @@ def send_post(title):
         message = request.form.get("post_message")
         posts.create_post(topic_title,post_title,message)
     return redirect(f"/topic/{title}")
+
 @app.route("/topic/<topic_title>/<post_id>")
 def post_page(topic_title, post_id):
     if topics.exists(topic_title) and topics.has_user_access(topic_title):
         messages = posts.get_message_list(post_id)
-        title = posts.get_title(post_id)
-        return render_template("/post.html", messages=messages,title = title)
+        post_title = posts.get_title(post_id)
+        return render_template("/post.html", messages=messages,post_title = post_title, post_id = post_id, topic_title = topic_title)
     error_message = f"""No access to topic '{topic_title}' or no such topic \n
                         or access to post '{post_id}' or no such post"""
     flash(error_message)
     return redirect("/")
+
+@app.route("/topic/<topic_title>/<post_id>/send_message", methods=["POST"])
+def send_message(topic_title, post_id):
+    if topics.exists(topic_title) and topics.has_user_access(topic_title):
+        if posts.exists(post_id):
+            message = request.form.get("message_message")
+            posts.send_message(int(post_id), message)
+        return redirect(f"/topic/{topic_title}/{post_id}")
+    return redirect("/") # fix
+
 
 @app.route("/admin_panel")
 def admin_panel():

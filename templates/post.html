@@ -1,4 +1,4 @@
-<h3> {{title}} </h3>
+<h3> {{post_title}} </h3>
 <hr>
 {% if messages %}
       {% for message in messages %}
@@ -8,3 +8,24 @@
     <p>No messages</p>
 {% endif %}
 <hr>
+
+<form action="/topic/{{topic_title}}/{{post_id}}/send_message" method="POST" onsubmit="return check(this)">
+    <p>Send a message</p>
+    <textarea name="message_message" placeholder="Message..." rows="3" cols="40"></textarea>
+    <br>
+    <input type="submit" value="Send">
+</form>
+
+<script>
+function check(form) {
+    if (form.message.value.length > 2000) {
+        alert("Message should be under 2000 characters.");
+        return false;
+    }
+    if (form.message.value.length == 0) {
+        alert("Message missing.");
+        return false;
+    }
+    return true;
+}
+</script>

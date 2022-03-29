@@ -30,5 +30,18 @@ def get_message_list(post_id):
     sql = "SELECT * FROM messages WHERE post_id=:post_id"
     return db.session.execute(sql, {"post_id": post_id}).fetchall()
 
-def send_message(post_id):
-    pass
+def send_message(post_id :int,message :str):
+    try:
+        sql = """
+        INSERT INTO messages (user_id, message, created, post_id) 
+            VALUES (:user_id, :message, current_timestamp, :post_id )
+        """
+        db.session.execute(sql, {
+                "user_id":users.user_id(),
+                "message":message,
+                "post_id":post_id,
+                })
+        db.session.commit()
+    except:
+        return False
+    return True
