@@ -62,7 +62,7 @@ def send_post(title):
         posts.create_post(topic_title,post_title,message)
     return redirect(f"/topic/{title}")
 
-@app.route("/topic/<topic_title>/<post_id>")
+@app.route("/topic/<topic_title>/<int:post_id>")
 def post_page(topic_title, post_id):
     if topics.exists(topic_title) and topics.has_user_access(topic_title):
         messages = posts.get_message_list(post_id)
@@ -82,6 +82,15 @@ def send_message(topic_title, post_id):
         return redirect(f"/topic/{topic_title}/{post_id}")
     return redirect("/") # fix
 
+@app.route("/topic/<topic_title>/<post_id>/edit_message/<int:message_id>", methods=["POST"])
+def edit_message(topic_title, post_id, message_id):
+    #
+    # add check for user permission
+    #
+    message = request.form.get("message")
+    if posts.edit_message(message, message_id):
+        return redirect(f"/topic/{topic_title}/{post_id}")
+    return redirect("/")
 
 @app.route("/admin_panel")
 def admin_panel():

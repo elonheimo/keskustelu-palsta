@@ -1,31 +1,101 @@
-<h3> {{post_title}} </h3>
-<hr>
-{% if messages %}
-      {% for message in messages %}
-         {{message.message}}
-      {% endfor %}
-{% else %}
-    <p>No messages</p>
-{% endif %}
-<hr>
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
-<form action="/topic/{{topic_title}}/{{post_id}}/send_message" method="POST" onsubmit="return check(this)">
-    <p>Send a message</p>
-    <textarea name="message_message" placeholder="Message..." rows="3" cols="40"></textarea>
-    <br>
-    <input type="submit" value="Send">
-</form>
+<script> 
+    function edit_onclick(id, message) {
+            var my_text=prompt('Edit message: ' + id,message);
+            if (my_text) {
+                {# add js post#}
+                var data = {
+                    'message' : my_text,
+                    'message_id' : id
+                }
+                post( {{request.path |tojson}} + '/edit_message/' + id, data )
+                alert(my_text);
+            }
+        }
+    window.onload = function() {
+        post( {{request.path |tojson}} + 'edit_message/' + id, data );
+    };
+</script>
+
+<div class="container">
+    <h3> {{post_title}} </h3>
+    <hr>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="border-left">
+                <div class="d-flex flex-row">
+                    <div class="p-0">
+                        <p>{{message.name}} ○ {{message.created.strftime("%Y/%m/%d %H:%M")}}
+                            {% if message.edited %}
+                                ○ edited: {{message.edited.strftime("%Y/%m/%d %H:%M")}}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+                        <p>{{message.message}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+                        <a onclick='edit_onclick({{message.message_id}}, {{ message.message|tojson }})' href="javascript:;"> edit</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No messages</p>
+    {% endif %}
+
+    <hr>
+
+    <form action="/topic/{{topic_title}}/{{post_id}}/send_message" method="POST" onsubmit="return check(this)">
+        <div class="form-group col-6">
+            <label for="text-area">Send a message</label>
+            <textarea class="form-control" rows="5" id="text-area" placeholder="Message..." name="message_message"></textarea>
+        </div>
+        <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>
+
 
 <script>
-function check(form) {
-    if (form.message.value.length > 2000) {
-        alert("Message should be under 2000 characters.");
-        return false;
+    function check(form) {
+        if (form.message.value.length > 2000) {
+            alert("Message should be under 2000 characters.");
+            return false;
+        }
+        if (form.message.value.length == 0) {
+            alert("Message missing.");
+            return false;
+        }
+        return true;
     }
-    if (form.message.value.length == 0) {
-        alert("Message missing.");
-        return false;
-    }
-    return true;
+    function post(path, params) {
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = path;
+
+        for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = key;
+            hiddenField.value = params[key];
+
+            form.appendChild(hiddenField);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
 }
 </script>

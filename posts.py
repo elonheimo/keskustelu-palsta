@@ -27,7 +27,13 @@ def exists(id):
     return db.session.execute(sql, {"id": id}).fetchone()[0]
 
 def get_message_list(post_id):
-    sql = "SELECT * FROM messages WHERE post_id=:post_id"
+    #"SELECT * FROM messages WHERE post_id=:post_id"
+    sql = """
+    SELECT m.id AS message_id, u.name, m.message, m.created, m.edited
+    FROM messages m JOIN users u ON m.user_id = u.id
+    WHERE m.post_id=:post_id
+    ORDER BY m.id ASC
+    """
     return db.session.execute(sql, {"post_id": post_id}).fetchall()
 
 def send_message(post_id :int,message :str):
@@ -43,5 +49,23 @@ def send_message(post_id :int,message :str):
                 })
         db.session.commit()
     except:
+        return False
+    return True
+
+def edit_message(message_content :str, message_id :int):
+    try:
+        sql = """
+        UPDATE messages
+        SET message=:message, edited = CURRENT_TIMESTAMP
+        WHERE id=:id
+        """
+        print("content", message_content, "id", message_id)
+        db.session.execute(sql, {
+            "message": message_content,
+            "id": message_id
+        })
+        db.session.commit()
+    except Exception as e:
+        print(e)
         return False
     return True
