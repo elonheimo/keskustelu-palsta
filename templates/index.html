@@ -1,3 +1,8 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+<div class="container">
 {% with messages = get_flashed_messages() %}
    {% if messages %}
       {% for message in messages %}
@@ -16,13 +21,22 @@
     {% if session.messages %}
         {{session.messages}}
     {% endif %}
-    <form action="/login" method="POST">
-    <p>Username:<br>
-    <input type="text" name="username"></p>
-    <p>Password:<br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Login">
-    </form>
+        <div class="d-flex flex-row">
+            <form action="/login" method="POST">
+                <div class="form-group col-6">
+                    <label for="inputUsername">Username</label>
+                    <input type="text" class="form-control" id="inputUsername" name="username">
+                </div>
+                <div class="form-group col-6">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" name="password">
+                </div>
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            
+        </div>
     <hr>
     <p> New user? </p>
     <a href="/register">Register here</a>
@@ -33,3 +47,4 @@
     <a href="/topic/{{topic.title}}">{{topic.title}}</a>
     <br>
 {% endfor %}
+</div>

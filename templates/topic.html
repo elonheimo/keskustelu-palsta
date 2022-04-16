@@ -1,20 +1,35 @@
-<h1> {{title}} </h1>
-<hr>
-<h3> Posts </h3>
-{% if posts %}
-      {% for post in posts %}
-         <a href="/topic/{{title}}/{{post.id}}">{{post.title}}</a>
-      {% endfor %}
-{% endif %}
-<hr>
-<form action="/topic/{{title}}/send_post" method="POST" onsubmit="return check(this)">
-    <p>Create a new post</p>
-    <input type="text" name="post_title" placeholder="Title...">
-    <br>
-    <textarea name="post_message" placeholder="Message..." rows="3" cols="40"></textarea>
-    <br>
-    <input type="submit" value="Send">
-</form>
+<!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<div class="container">
+    <h1> {{title}} </h1>
+    <hr>
+    <h3> Posts </h3>
+    {% if posts %}
+        {% for post in posts %}
+            <div class="d-flex flex-row">
+                <div class="p-0">
+                    <a href="/topic/{{title}}/{{post.id}}">{{post.title}}</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <hr>
+    <form action="/topic/{{title}}/send_post" method="POST" onsubmit="return check(this)">
+        <div class="form-group col-4">
+            <h4>Create a new post</h4>
+            <label for="inputUsername">Title</label>
+            <input type="text" class="form-control" name="post_title" placeholder="Title...">
+        </div>
+        <div class="form-group col-6">
+            <label for="text-area">Send a message</label>
+            <textarea class="form-control" rows="3" id="text-area" placeholder="Message..." name="post_message"></textarea>
+        </div>
+        <div class="form-group col-6">
+            <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+    </form>
+</div>
 
 <script>
 function check(form) {

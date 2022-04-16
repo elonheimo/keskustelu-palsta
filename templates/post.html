@@ -41,12 +41,13 @@
                         <p>{{message.message}}</p>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-8">
-                        <a onclick='edit_onclick({{message.message_id}}, {{ message.message|tojson }})' href="javascript:;"> edit</a>
-                    </div>
+                {% if message.user_id == session.user_id  %}
+                    <div class="row">
+                        <div class="col-8">
+                            <a onclick='edit_onclick({{message.message_id}}, {{ message.message|tojson }})' href="javascript:;"> edit</a>
+                        </div>
                 </div>
+                {% endif %}
             </div>
             <br>
         {% endfor %}

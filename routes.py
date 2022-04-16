@@ -84,9 +84,9 @@ def send_message(topic_title, post_id):
 
 @app.route("/topic/<topic_title>/<post_id>/edit_message/<int:message_id>", methods=["POST"])
 def edit_message(topic_title, post_id, message_id):
-    #
-    # add check for user permission
-    #
+    if not posts.can_user_edit_message(message_id, session.get("user_id")):
+        print(f"User {session.get('user_id')} not allowed to edit message")
+        return redirect(f"/topic/{topic_title}/{post_id}")
     message = request.form.get("message")
     if posts.edit_message(message, message_id):
         return redirect(f"/topic/{topic_title}/{post_id}")

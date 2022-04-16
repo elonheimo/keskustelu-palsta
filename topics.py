@@ -57,4 +57,21 @@ def has_user_access(title :str):
             return db.session.execute(sql, {"user_id":users.user_id()}).fetchone()
         return True
 
+def post_count():
+    pass
+
+def message_count():
+    pass
+
+def most_recent_message(topic_id: int):
+    sql = """
+    SELECT m.created FROM messages m
+    LEFT JOIN posts p ON m.post_id = p.id 
+    WHERE p.topic_id=:topic_id 
+    ORDER BY m.created DESC;
+    """
+    return db.session.execute(sql,{
+        "topic_id":topic_id
+    }).fetchone()["created"]
+
 #ADD remove_topic, that migrates all its posts to a general topic
