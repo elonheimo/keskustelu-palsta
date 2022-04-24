@@ -45,6 +45,24 @@
 <p> Topics <p>
 {% for topic in topics%}
     <a href="/topic/{{topic.title}}">{{topic.title}}</a>
+    
+    {% if topic.post_count == 1 %}
+        {{ topic.post_count}} post
+    {% else %}
+        {{ topic.post_count}} posts
+    {% endif%}
+
+    {% if topic.post_count >= 1  %}
+        {% if topic.message_count == 1 %}
+            {{ topic.message_count }} message
+        {% else %}
+            {{ topic.message_count }} messages
+        {% endif%}
+    {% endif %}
+
+    {% if topic.most_recent_message %}
+        Last message: {{topic.most_recent_message.strftime("%Y/%m/%d %H:%M")}} 
     <br>
+    {% endif %}
 {% endfor %}
 </div>

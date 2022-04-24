@@ -13,13 +13,30 @@ def create_topic(title:str, secret :bool):
     return False
 
 def get_list():
+    most_recent_query = """
+    (select m.created as most_recent_message 
+    from messages m LEFT JOIN posts p ON m.post_id = p.id 
+    WHERE p.topic_id=topic.id 
+    ORDER BY m.created DESC LIMIT 1)
+    """
+    post_count_query = """
+    (SELECT COUNT(*) AS post_count FROM posts WHERE topic_id=topic.id)
+    """
+    message_count_query = """
+    (SELECT COUNT(*) AS message_count
+    FROM messages 
+    WHERE post_id IN (select id from posts where topic_id=topic.id) )
+    """
+    xtra_queries = f"{most_recent_query}, {post_count_query}, {message_count_query}"
+
     if users.user_id() == 0: #user not logged in
-        sql = "SELECT * FROM TOPICS WHERE secret = FALSE"
+        sql = f"SELECT * ,{xtra_queries} FROM TOPICS topic WHERE secret = FALSE"
     elif users.is_admin():
-        sql = "SELECT * FROM TOPICS"
+        sql = f"SELECT *, {xtra_queries} FROM TOPICS topic"
     else: #user logged in
-        sql = """ 
-            SELECT * FROM topics WHERE secret = FALSE or id =
+        sql = f""" 
+            SELECT *, {xtra_queries} FROM topics topic 
+            WHERE secret = FALSE OR id =
             (SELECT topic_id FROM secret_access where user_id=:user_id)
             """
         return db.session.execute(sql, {"user_id":users.user_id()}).fetchall()
@@ -56,22 +73,5 @@ def has_user_access(title :str):
             sql = "SELECT exists (SELECT 1 FROM secret_access where user_id=:user_id)"
             return db.session.execute(sql, {"user_id":users.user_id()}).fetchone()
         return True
-
-def post_count():
-    pass
-
-def message_count():
-    pass
-
-def most_recent_message(topic_id: int):
-    sql = """
-    SELECT m.created FROM messages m
-    LEFT JOIN posts p ON m.post_id = p.id 
-    WHERE p.topic_id=:topic_id 
-    ORDER BY m.created DESC;
-    """
-    return db.session.execute(sql,{
-        "topic_id":topic_id
-    }).fetchone()["created"]
 
 #ADD remove_topic, that migrates all its posts to a general topic
