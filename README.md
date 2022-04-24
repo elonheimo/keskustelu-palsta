@@ -10,7 +10,7 @@ Sovelluksen ominaisuuksia:
 
 [x] Käyttäjä voi kirjautua sisään ja ulos sekä luoda uuden tunnuksen.
 
-[ ] Käyttäjä näkee sovelluksen etusivulla listan alueista sekä jokaisen alueen ketjujen ja viestien määrän ja viimeksi lähetetyn viestin ajankohdan.
+[x] Käyttäjä näkee sovelluksen etusivulla listan alueista sekä jokaisen alueen ketjujen ja viestien määrän ja viimeksi lähetetyn viestin ajankohdan.
 
 [X] Käyttäjä voi luoda alueelle uuden ketjun antamalla ketjun otsikon ja aloitusviestin sisällön.
 
@@ -23,4 +23,5 @@ Sovelluksen ominaisuuksia:
 [X] Ylläpitäjä voi lisätä ja poistaa keskustelualueita.
 
 [X] Ylläpitäjä voi luoda salaisen alueen 
-[ ] Ylläpitäjä voi määrittää, keillä käyttäjillä on pääsy alueelle.
+
+[X] Ylläpitäjä voi määrittää, keillä käyttäjillä on pääsy alueelle.
