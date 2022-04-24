@@ -24,4 +24,4 @@ Sovelluksen ominaisuuksia:
 
 [X] Ylläpitäjä voi luoda salaisen alueen 
 
-[X] Ylläpitäjä voi määrittää, keillä käyttäjillä on pääsy alueelle.
+[ ] Ylläpitäjä voi määrittää, keillä käyttäjillä on pääsy alueelle.
