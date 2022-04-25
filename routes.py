@@ -67,7 +67,11 @@ def post_page(topic_title, post_id):
     if topics.exists(topic_title) and topics.has_user_access(topic_title):
         messages = posts.get_message_list(post_id)
         post_title = posts.get_title(post_id)
-        return render_template("/post.html", messages=messages,post_title = post_title, post_id = post_id, topic_title = topic_title)
+        return render_template("/post.html",
+            messages=messages,
+            post_title = post_title,
+            post_id = post_id,
+            topic_title = topic_title)
     error_message = f"""No access to topic '{topic_title}' or no such topic \n
                         or access to post '{post_id}' or no such post"""
     flash(error_message)
