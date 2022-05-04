@@ -1,6 +1,6 @@
 from crypt import methods
 from app import app
-from flask import render_template, request, redirect, session, flash
+from flask import abort, render_template, request, redirect, session, flash
 import topics, users, posts
 from db import db
 
@@ -60,6 +60,8 @@ def topic_page(title):
 
 @app.route("/topic/<title>/send_post", methods=["POST"])
 def send_post(title):
+    if session["csrf_token"] != request.form["csrf_token"]: abort(403)
+
     if topics.exists(title) and topics.has_user_access(title):
         topic_title = title
         post_title = request.form.get("post_title")
@@ -84,6 +86,8 @@ def post_page(topic_title, post_id):
 
 @app.route("/topic/<topic_title>/<post_id>/send_message", methods=["POST"])
 def send_message(topic_title, post_id):
+    if session["csrf_token"] != request.form["csrf_token"]: abort(403)
+
     if topics.exists(topic_title) and topics.has_user_access(topic_title):
         if posts.exists(post_id):
             message = request.form.get("message_message")
@@ -93,6 +97,8 @@ def send_message(topic_title, post_id):
 
 @app.route("/topic/<topic_title>/<post_id>/edit_message/<int:message_id>", methods=["POST"])
 def edit_message(topic_title, post_id, message_id):
+    if session["csrf_token"] != request.form["csrf_token"]: abort(403)
+    
     if not posts.can_user_edit_message(message_id, session.get("user_id")):
         print(f"User {session.get('user_id')} not allowed to edit message")
         return redirect(f"/topic/{topic_title}/{post_id}")

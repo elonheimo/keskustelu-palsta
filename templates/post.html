@@ -17,7 +17,8 @@
                 {# add js post#}
                 var data = {
                     'message' : my_text,
-                    'message_id' : id
+                    'message_id' : id,
+                    'csrf_token' : '{{ session.csrf_token|safe}}'
                 }
                 post( {{request.path |tojson}} + '/edit_message/' + id, data )
                 alert(my_text);
@@ -81,6 +82,9 @@
 
 
     <form action="/topic/{{topic_title}}/{{post_id}}/send_message" method="POST" onsubmit="return check(this)">
+        
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
         <div class="form-group col-6">
             <label for="text-area">Send a message</label>
             <textarea class="form-control" rows="5" id="text-area" placeholder="Message..." name="message_message"></textarea>

@@ -27,6 +27,7 @@
     {% endif %}
     <hr>
     <form action="/topic/{{title}}/send_post" method="POST" onsubmit="return check(this)">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="form-group col-4">
             <h4>Create a new post</h4>
             <label for="inputUsername">Title</label>
