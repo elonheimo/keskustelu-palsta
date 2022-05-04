@@ -1,17 +1,38 @@
-<p>Please input your user details</p>
-<hr>
-{% with messages = get_flashed_messages() %}
-   {% if messages %}
-      {% for message in messages %}
-         {{ message }}
-      {% endfor %}
-   {% endif %}
-{% endwith %}
-<form action="/register_user" method="POST">
-<p>Username:<br>
-<input type="text" name="username"></p>
-<p>Password:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Register user">
-<hr>
-<form>
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+   <div class="container">
+
+      <p>Please input your user details</p>
+      <hr>
+      {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            {% for message in messages %}
+               {{ message }}
+            {% endfor %}
+         {% endif %}
+      {% endwith %}
+
+      <div class="flex-row">
+         <form action="/register_user" method="POST">
+            <div class="form-group col-6">
+               <label for="inputUsername">Username</label>
+               <input type="text" class="form-control" id="inputUsername" name="username">
+            </div>
+            <div class="form-group col-6">
+               <label for="inputPassword">Password</label>
+               <input type="password" class="form-control" id="password", name="password">
+            </div>
+            <div class="form-group col-6">
+               <label for="inputPassword2">Re-enter password</label>
+               <input type="password" class="form-control" id="password2", name="password2">
+            </div>
+            <div class="form-group col-6">
+               <button type="submit" class="btn btn-primary">Register user</button>
+            </div>
+         <form>
+      </div>
+   </div>
+{% endblock %}

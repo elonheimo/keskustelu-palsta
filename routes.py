@@ -32,6 +32,11 @@ def logout():
 def register_user():
     username = request.form["username"]
     password = request.form["password"]
+    password_again = request.form["password2"]
+    print(password, password_again)
+    if password != password_again:
+        flash("Passwords do not match try again")
+        return redirect("/register")
     if users.register(username, password):
         return redirect("/")
     else:
