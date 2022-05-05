@@ -2,8 +2,13 @@ from flask import flash
 from db import db
 import users
 
+def exists(title :str):
+    sql = "select exists(select 1 from topics where title=:title)"
+    return db.session.execute(sql, {"title": title}).fetchone()[0]
+
 def create_topic(title:str, secret :bool):
-    #add checks if topic already exists
+    
+    if exists(title): return False
     if users.is_admin():
         print(title)
         sql = "INSERT INTO topics (title, time, secret) VALUES (:title, current_timestamp, :secret)"
@@ -48,9 +53,6 @@ def get_posts(title: str):
     sql = "select * from posts where topic_id=:topic_id"
     return db.session.execute(sql, {"topic_id": topic_id}).fetchall()
 
-def exists(title :str):
-    sql = "select exists(select 1 from topics where title=:title)"
-    return db.session.execute(sql, {"title": title}).fetchone()[0]
 
 def is_secret(title :str):
     sql = "select secret from topics where title=:title"

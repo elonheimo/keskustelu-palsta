@@ -7,7 +7,11 @@ from db import db
 
 @app.route("/", methods = ["GET","POST"])
 def index():
-    return render_template("index.html", topics = topics.get_list())
+    return render_template(
+        "index.html",
+        topics = topics.get_list(),
+        is_admin = users.is_admin()
+    )
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -34,6 +38,8 @@ def register_user():
     username = request.form["username"]
     password = request.form["password"]
     password_again = request.form["password2"]
+    if request.form.get("admin", False): admin = True
+    else: admin = False
 
     if password != password_again:
         flash("Passwords do not match try again")
@@ -50,7 +56,7 @@ def register_user():
             flash("username should only contain finnish letters")
             return redirect("/register")
     
-    if users.register(username, password):
+    if users.register(username, password, admin):
         return redirect("/")
     else:
         flash(f"Username '{username}' is taken. Try another")
@@ -59,6 +65,13 @@ def register_user():
 @app.route("/create_topic", methods=["POST"])
 def create_topic():
     topic_title = request.form["topic_title"]
+    if topic_title == "": 
+        flash("empty topic name")
+        return redirect("/admin_panel")
+    for title_char in topic_title:
+        if title_char not in (string.ascii_letters+string.digits):
+            flash("use only ascii letters or numbers in topic name")
+            return redirect("/admin_panel")
     secret = request.form.get("secret", False)
     topics.create_topic(topic_title,secret)
     return redirect("/")
@@ -122,5 +135,9 @@ def edit_message(topic_title, post_id, message_id):
 
 @app.route("/admin_panel")
 def admin_panel():
-    return render_template("/admin_panel.html")
-
+    if users.is_admin():
+        return render_template(
+            "/admin_panel.html",
+            is_admin = users.is_admin()
+        )
+    return("/")

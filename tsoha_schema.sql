@@ -2,7 +2,8 @@ CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "name" TEXT UNIQUE,
   "password" TEXT,
-  "time" timestamp
+  "time" timestamp,
+  "admin" boolean
 );
 
 CREATE TABLE "topics" (
