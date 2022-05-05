@@ -80,7 +80,7 @@
         <p>No messages</p>
     {% endif %}
 
-
+    {% if session.username %} {# checks if user is logged in #}
     <form action="/topic/{{topic_title}}/{{post_id}}/send_message" method="POST" onsubmit="return check(this)">
         
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -93,6 +93,7 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </div>
     </form>
+    {% endif %}
 </div>
 
 

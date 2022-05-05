@@ -26,6 +26,7 @@
         {% endfor %}
     {% endif %}
     <hr>
+    {% if session.username %} {# checks if user is logged in #}
     <form action="/topic/{{title}}/send_post" method="POST" onsubmit="return check(this)">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="form-group col-4">
@@ -41,6 +42,7 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </div>
     </form>
+    {% endif %}
 </div>
 
 <script>

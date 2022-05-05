@@ -15,7 +15,7 @@ def login():
     
     if not users.login(username,password):
         flash('Wrong username or password')
-    flash('Succesful login') 
+    else: flash('Succesful login') 
     return redirect("/")
 
 @app.route("/register")
@@ -98,7 +98,7 @@ def send_message(topic_title, post_id):
 @app.route("/topic/<topic_title>/<post_id>/edit_message/<int:message_id>", methods=["POST"])
 def edit_message(topic_title, post_id, message_id):
     if session["csrf_token"] != request.form["csrf_token"]: abort(403)
-    
+
     if not posts.can_user_edit_message(message_id, session.get("user_id")):
         print(f"User {session.get('user_id')} not allowed to edit message")
         return redirect(f"/topic/{topic_title}/{post_id}")
