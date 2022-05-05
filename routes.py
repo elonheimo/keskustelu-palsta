@@ -1,4 +1,5 @@
 from crypt import methods
+import string
 from app import app
 from flask import abort, render_template, request, redirect, session, flash
 import topics, users, posts
@@ -33,10 +34,22 @@ def register_user():
     username = request.form["username"]
     password = request.form["password"]
     password_again = request.form["password2"]
-    print(password, password_again)
+
     if password != password_again:
         flash("Passwords do not match try again")
         return redirect("/register")
+    if len(password)<8:
+        flash("Minimum password length 8 chars")
+        return redirect("/register")
+    if not 1<= len(username) <= 10: 
+        flash("Username should be 1-10 characters")
+        return redirect("/register")
+    letters = string.ascii_letters + "äöåÄÖÅ" + "1234567890"
+    for username_char in username:
+        if username_char not in letters:
+            flash("username should only contain finnish letters")
+            return redirect("/register")
+    
     if users.register(username, password):
         return redirect("/")
     else:
