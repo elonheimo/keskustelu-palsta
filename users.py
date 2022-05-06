@@ -2,7 +2,7 @@ import secrets
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session
-
+import topics
 """
 True = success
 False = no success
@@ -43,6 +43,22 @@ def register(username:str, password:str, admin: bool):
 
 def user_id():
     return session.get("user_id",0)
+
+def users_by_secret_access(topic_name :str):
+    """
+    Returns a table with user name, id and bool if has access to topic
+    |name|id|has_access
+    """
+    topic_id = topics.topic_id(topic_name)
+    sql = """
+    select name, id, 
+        exists(select 1 FROM secret_access 
+        WHERE topic_id =:topic_id and user_id = u.id )
+        as has_access
+    FROM users u;
+    """
+    return db.session.execute(sql, {"topic_id": topic_id}).fetchall()
+    
 
 def is_admin():
     sql = f"""

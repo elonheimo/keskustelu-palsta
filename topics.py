@@ -7,7 +7,7 @@ def exists(title :str):
     return db.session.execute(sql, {"title": title}).fetchone()[0]
 
 def create_topic(title:str, secret :bool):
-    
+
     if exists(title): return False
     if users.is_admin():
         print(title)
@@ -75,5 +75,8 @@ def has_user_access(title :str):
             sql = "SELECT exists (SELECT 1 FROM secret_access where user_id=:user_id)"
             return db.session.execute(sql, {"user_id":users.user_id()}).fetchone()
         return True
+
+def give_user_access():
+    pass
 
 #ADD remove_topic, that migrates all its posts to a general topic

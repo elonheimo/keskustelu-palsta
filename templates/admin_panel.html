@@ -24,6 +24,49 @@
         <input type="submit" value="Create">
         </form>
         <hr>
+
+        <div class="flex-row">
+            <form action="#" method="GET">
+            <div class="form-group col-6">
+                <label for="exampleFormControlSelect2">Select topic</label>
+                <select class="form-control" id="exampleFormControlSelect2" name="selected_topic">
+                {% for topic in topics %}
+                    {% if topic.secret %}
+                        <option 
+                            {% if selected_topic == topic.title %}
+                                selected
+                            {% endif%}
+                        >
+                        {{ topic.title }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-6">
+               <button type="submit" class="btn btn-primary">Secret access</button>
+            </div>
+            </form>
+        </div>
+        {# user that do not have acces#}
+        <div class="flex-row">
+            <form action="/admin_panel" method="POST">
+            <div class="form-group col-6">
+                <input type="hidden" name="selected_topic" value="{{ selected_topic }}">
+                <select class="select" multiple name="users">
+                    {% for user in user_list %}
+                        <option value="{{ user.id }}">
+                        {{ user.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+            </div>
+            <div class="form-group col-6">
+               <button type="submit" class="btn btn-primary">Grant users access</button>
+            </div>
+            </form>
+        </div>
     {% endif %}
 
 </div>

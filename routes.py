@@ -133,11 +133,38 @@ def edit_message(topic_title, post_id, message_id):
         return redirect(f"/topic/{topic_title}/{post_id}")
     return redirect("/")
 
-@app.route("/admin_panel")
+@app.route("/admin_panel", methods=["GET", "POST"])
 def admin_panel():
     if users.is_admin():
+        selected_topic_query = request.args.get("selected_topic")
+        print(selected_topic_query)
+        if request.method == "POST":
+            selected_topic = request.form.get("selected_topic")
+            print(request.form.getlist("users"))
+            [print(k,v) for k,v in request.form.items()]
+            print(request.form.items())
+            return render_template(
+                "/admin_panel.html",
+                is_admin = users.is_admin(),
+                topics = topics.get_list(),
+                user_list = users.users_by_secret_access(selected_topic),
+                selected_topic = selected_topic
+            )
+
+        if selected_topic_query:
+            #print("users")
+            #print(users.users_by_secret_access(selected_topic_query))
+            return render_template(
+                "/admin_panel.html",
+                is_admin = users.is_admin(),
+                topics = topics.get_list(),
+                user_list = users.users_by_secret_access(selected_topic_query),
+                selected_topic = selected_topic_query
+            )
         return render_template(
             "/admin_panel.html",
-            is_admin = users.is_admin()
+            is_admin = users.is_admin(),
+            topics = topics.get_list(),
+            selected_topic = selected_topic_query
         )
     return("/")
