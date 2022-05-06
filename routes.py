@@ -140,9 +140,10 @@ def admin_panel():
         print(selected_topic_query)
         if request.method == "POST":
             selected_topic = request.form.get("selected_topic")
+            users_list = request.form.getlist("users")
             print(request.form.getlist("users"))
-            [print(k,v) for k,v in request.form.items()]
-            print(request.form.items())
+            if users.is_admin():
+                users.grant_users_secret_access(selected_topic, users_list)
             return render_template(
                 "/admin_panel.html",
                 is_admin = users.is_admin(),

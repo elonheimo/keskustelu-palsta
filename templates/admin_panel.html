@@ -55,9 +55,11 @@
                 <input type="hidden" name="selected_topic" value="{{ selected_topic }}">
                 <select class="select" multiple name="users">
                     {% for user in user_list %}
-                        <option value="{{ user.id }}">
-                        {{ user.name }}
-                        </option>
+                        {% if not user.has_access %}
+                            <option value="{{ user.id }}">
+                            {{ user.name }}
+                            </option>
+                        {% endif %}
                     {% endfor %}
                 </select>
                 

@@ -1,3 +1,4 @@
+from os import access
 import secrets
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -59,6 +60,18 @@ def users_by_secret_access(topic_name :str):
     """
     return db.session.execute(sql, {"topic_id": topic_id}).fetchall()
     
+def grant_users_secret_access(topic_name :str, user_ids: list):
+    sql = """
+    INSERT INTO secret_access 
+    (topic_id, user_id) VALUES (:topic_id, :user_id);
+    """
+    topic_id= topics.topic_id(topic_name)
+    for user_id in user_ids:
+        db.session.execute(sql,
+            {"topic_id":topic_id,
+            "user_id":user_id}    
+        )
+    db.session.commit()
 
 def is_admin():
     sql = f"""
