@@ -73,6 +73,20 @@ def grant_users_secret_access(topic_name :str, user_ids: list):
         )
     db.session.commit()
 
+def deny_users_secret_access(topic_name :str, user_ids: list):
+    sql = """
+    DELETE FROM secret_access 
+    WHERE topic_id=:topic_id AND user_id=:user_id
+    """
+    topic_id= topics.topic_id(topic_name)
+    for user_id in user_ids:
+        db.session.execute(sql,
+            {"topic_id":topic_id,
+            "user_id":user_id}    
+        )
+    db.session.commit()
+
+
 def is_admin():
     sql = f"""
     select exists(select 1 from users where id =:user_id and admin=True)

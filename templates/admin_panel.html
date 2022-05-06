@@ -65,9 +65,29 @@
                 
             </div>
             <div class="form-group col-6">
-               <button type="submit" class="btn btn-primary">Grant users access</button>
+               <button type="submit" id = "grant_access" name = "grant_access" class="btn btn-primary">Grant users access</button>
             </div>
             </form>
+            
+            <form action="/admin_panel" method="POST">
+            <div class="form-group col-6">
+                <input type="hidden" name="selected_topic" value="{{ selected_topic }}">
+                <select class="select" multiple name="users">
+                    {% for user in user_list %}
+                        {% if user.has_access %}
+                            <option value="{{ user.id }}">
+                            {{ user.name }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                
+            </div>
+            <div class="form-group col-6">
+               <button type="submit" id = "deny_access" name = "deny_access" class="btn btn-primary">Deny users access</button>
+            </div>
+            </form>
+            
         </div>
     {% endif %}
 

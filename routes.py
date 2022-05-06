@@ -139,18 +139,35 @@ def admin_panel():
         selected_topic_query = request.args.get("selected_topic")
         print(selected_topic_query)
         if request.method == "POST":
-            selected_topic = request.form.get("selected_topic")
-            users_list = request.form.getlist("users")
-            print(request.form.getlist("users"))
-            if users.is_admin():
+            if "grant_access" in request.form:
+                print("grant_access")
+                selected_topic = request.form.get("selected_topic")
+                users_list = request.form.getlist("users")
+                print(request.form.getlist("users"))
+                
                 users.grant_users_secret_access(selected_topic, users_list)
-            return render_template(
-                "/admin_panel.html",
-                is_admin = users.is_admin(),
-                topics = topics.get_list(),
-                user_list = users.users_by_secret_access(selected_topic),
-                selected_topic = selected_topic
-            )
+                
+                return render_template(
+                    "/admin_panel.html",
+                    is_admin = users.is_admin(),
+                    topics = topics.get_list(),
+                    user_list = users.users_by_secret_access(selected_topic),
+                    selected_topic = selected_topic
+                )
+            elif "deny_access" in request.form:
+                print("deny_access")
+                selected_topic = request.form.get("selected_topic")
+                users_list = request.form.getlist("users")
+
+                users.deny_users_secret_access(selected_topic, users_list)
+
+                return render_template(
+                    "/admin_panel.html",
+                    is_admin = users.is_admin(),
+                    topics = topics.get_list(),
+                    user_list = users.users_by_secret_access(selected_topic),
+                    selected_topic = selected_topic
+                )
 
         if selected_topic_query:
             #print("users")
