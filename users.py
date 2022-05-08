@@ -63,7 +63,8 @@ def users_by_secret_access(topic_name :str):
 def grant_users_secret_access(topic_name :str, user_ids: list):
     sql = """
     INSERT INTO secret_access 
-    (topic_id, user_id) VALUES (:topic_id, :user_id);
+    (topic_id, user_id) VALUES (:topic_id, :user_id)
+    ON CONFLICT DO NOTHING
     """
     topic_id= topics.topic_id(topic_name)
     for user_id in user_ids:

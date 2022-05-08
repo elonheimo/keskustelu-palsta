@@ -160,7 +160,6 @@ def admin_panel():
                 users_list = request.form.getlist("users")
 
                 users.deny_users_secret_access(selected_topic, users_list)
-
                 return render_template(
                     "/admin_panel.html",
                     is_admin = users.is_admin(),
