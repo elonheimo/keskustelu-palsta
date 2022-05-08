@@ -14,21 +14,36 @@
     {% endwith %}
 
     {% if is_admin %}
-        <p> Create new topic to forum </p>
-        <br> 
-        <form action="/create_topic" method="POST">
-        <p>Topic name:<br>
-        <input type="text" name="topic_title"></p>
-        <p>Secret: 
-        <input type="checkbox" name="secret"></p>
-        <input type="submit" value="Create">
-        </form>
-        <hr>
+        <br>
+        <br>
+        <div class="flex-row">
+            <form action="/create_topic" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <div class="form-group col-6">
+                <label for="inputUsername">
+                Topic name 
+                <br>(only ascii numbers and digits)
+                <br>(cannot create a new topic if one with the name exists already)
+                </label>
+                <input type="text" class="form-control" id="topic_title" name="topic_title">
+                </div>
+                <div class="form-group col-6">
+                <label><input type="checkbox" name="secret" value="secret"> Secret</label>
+                </div>
+                <div class="form-group col-6">
+                <button type="submit" class="btn btn-primary">Create topic</button>
+                </div>
+            </form>
+        </div>
 
         <div class="flex-row">
             <form action="#" method="GET">
             <div class="form-group col-6">
-                <label for="exampleFormControlSelect2">Select topic</label>
+                <label for="exampleFormControlSelect2">
+                Selec topic from dropdown menu. Click button "select topic".
+                <br>After that you can grant or deny access to selected secret topic.
+                <br>To choose multiple users at once hold control when selecting users.
+                </label>
                 <select class="form-control" id="exampleFormControlSelect2" name="selected_topic">
                 {% for topic in topics %}
                     {% if topic.secret %}
@@ -44,13 +59,14 @@
                 </select>
             </div>
             <div class="form-group col-6">
-               <button type="submit" class="btn btn-primary">Secret access</button>
+               <button type="submit" class="btn btn-primary">Select topic</button>
             </div>
             </form>
         </div>
-        {# user that do not have acces#}
+
         <div class="flex-row">
             <form action="/admin_panel" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <div class="form-group col-6">
                 <input type="hidden" name="selected_topic" value="{{ selected_topic }}">
                 <select class="select" multiple name="users">
@@ -70,6 +86,7 @@
             </form>
             
             <form action="/admin_panel" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <div class="form-group col-6">
                 <input type="hidden" name="selected_topic" value="{{ selected_topic }}">
                 <select class="select" multiple name="users">

@@ -64,6 +64,8 @@ def register_user():
 
 @app.route("/create_topic", methods=["POST"])
 def create_topic():
+    if session["csrf_token"] != request.form["csrf_token"]: abort(403)
+
     topic_title = request.form["topic_title"]
     if topic_title == "": 
         flash("empty topic name")
@@ -72,7 +74,8 @@ def create_topic():
         if title_char not in (string.ascii_letters+string.digits):
             flash("use only ascii letters or numbers in topic name")
             return redirect("/admin_panel")
-    secret = request.form.get("secret", False)
+    if request.form.get("secret", False): secret = True
+    else: secret = False
     topics.create_topic(topic_title,secret)
     return redirect("/")
 
@@ -139,6 +142,9 @@ def admin_panel():
         selected_topic_query = request.args.get("selected_topic")
         print(selected_topic_query)
         if request.method == "POST":
+
+            if session["csrf_token"] != request.form["csrf_token"]: abort(403)
+
             if "grant_access" in request.form:
                 print("grant_access")
                 selected_topic = request.form.get("selected_topic")
@@ -154,6 +160,7 @@ def admin_panel():
                     user_list = users.users_by_secret_access(selected_topic),
                     selected_topic = selected_topic
                 )
+            
             elif "deny_access" in request.form:
                 print("deny_access")
                 selected_topic = request.form.get("selected_topic")
@@ -178,6 +185,7 @@ def admin_panel():
                 user_list = users.users_by_secret_access(selected_topic_query),
                 selected_topic = selected_topic_query
             )
+        
         return render_template(
             "/admin_panel.html",
             is_admin = users.is_admin(),
